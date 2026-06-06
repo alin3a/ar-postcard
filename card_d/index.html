@@ -10,37 +10,36 @@
       <a-assets>
         <a-asset-item id="gaudiEchse" src="./echse.glb"></a-asset-item>
       </a-assets>
-
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
-
-   <a-entity mindar-image-target="targetIndex: 0">
-
- <a-entity mindar-image-target="targetIndex: 0" id="lizardParent">
-  <a-gltf-model
-    id="lizard"
-    src="#gaudiEchse"
-    scale="5 5 5"
-    rotation="0 0 0"
-    animation-mixer="timeScale: 1">
-  </a-gltf-model>
-</a-entity>
-
-<script>
-  const lizard = document.getElementById('lizard');
-  const radius = 0.3;
-  let angle = 0;
-
-  function animate() {
-    angle += 0.005;
-    const x = Math.cos(angle) * radius;
-    const z = Math.sin(angle) * radius;
-    const deg = -(angle * 180 / Math.PI);
-    lizard.setAttribute('position', `${x} 0 ${z}`);
-    lizard.setAttribute('rotation', `0 ${deg} 0`);
-    requestAnimationFrame(animate);
-  }
-  animate();
-</script>
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-gltf-model
+          id="lizard"
+          src="#gaudiEchse"
+          scale="5 5 5"
+          rotation="0 0 0"
+          animation-mixer="timeScale: 1">
+        </a-gltf-model>
+      </a-entity>
     </a-scene>
+
+    <script>
+      const scene = document.querySelector('a-scene');
+      scene.addEventListener('loaded', () => {
+        const lizard = document.getElementById('lizard');
+        const radius = 0.3;
+        let angle = 0;
+
+        function animate() {
+          angle += 0.005;
+          const x = Math.cos(angle) * radius;
+          const z = Math.sin(angle) * radius;
+          const deg = -(angle * 180 / Math.PI);
+          lizard.setAttribute('position', `${x} 0 ${z}`);
+          lizard.setAttribute('rotation', `0 ${deg} 0`);
+          requestAnimationFrame(animate);
+        }
+        animate();
+      });
+    </script>
   </body>
 </html>
