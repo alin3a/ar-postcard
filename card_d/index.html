@@ -33,7 +33,7 @@
           angle += 0.005;
           const x = Math.cos(angle) * radius;
           const z = Math.sin(angle) * radius;
-          const deg = -(angle * 180 / Math.PI) + 90;
+          const deg = -(angle * 180 / Math.PI);
           lizard.setAttribute('position', `${x} 0 ${z}`);
           lizard.setAttribute('rotation', `0 ${deg} 0`);
           requestAnimationFrame(animate);
