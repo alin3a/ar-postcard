@@ -15,21 +15,32 @@
 
    <a-entity mindar-image-target="targetIndex: 0">
 
-  <a-entity animation="property: rotation; to: 0 360 0; dur: 8000; easing: linear; loop: true">
-
-    <a-entity position="0.3 0 0">
-
-      <a-gltf-model
-        src="#gaudiEchse"
-        scale="5 5 5"
-        rotation="0 90 -90"
-        animation-mixer="timeScale: 1">
-      </a-gltf-model>
-
-    </a-entity>
-  </a-entity>
-
+ <a-entity mindar-image-target="targetIndex: 0" id="lizardParent">
+  <a-gltf-model
+    id="lizard"
+    src="#gaudiEchse"
+    scale="5 5 5"
+    rotation="0 0 0"
+    animation-mixer="timeScale: 1">
+  </a-gltf-model>
 </a-entity>
+
+<script>
+  const lizard = document.getElementById('lizard');
+  const radius = 0.3;
+  let angle = 0;
+
+  function animate() {
+    angle += 0.005;
+    const x = Math.cos(angle) * radius;
+    const z = Math.sin(angle) * radius;
+    const deg = -(angle * 180 / Math.PI);
+    lizard.setAttribute('position', `${x} 0 ${z}`);
+    lizard.setAttribute('rotation', `0 ${deg} 0`);
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
     </a-scene>
   </body>
 </html>
