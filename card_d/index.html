@@ -16,7 +16,7 @@
           id="lizard"
           src="#gaudiEchse"
           scale="5 5 5"
-          rotation="90 0 180"
+          rotation="0 0 0"
           animation-mixer="timeScale: 1">
         </a-gltf-model>
       </a-entity>
@@ -25,21 +25,21 @@
     <script>
       const scene = document.querySelector('a-scene');
       scene.addEventListener('loaded', () => {
-        const lizard = document.getElementById('lizard');
-        const radius = 0.3;
-        let angle = 0;
+  const lizard = document.getElementById('lizard');
+  const radius = 0.3;
+  let angle = 0;
 
-        function animate() {
-          angle += 0.005;
-          const x = Math.cos(angle) * radius;
-          const z = Math.sin(angle) * radius;
-          const deg = -(angle * 180 / Math.PI);
-          lizard.setAttribute('position', `${x} 0 ${z}`);
-          lizard.setAttribute('rotation', `0 ${deg} 0`);
-          requestAnimationFrame(animate);
-        }
-        animate();
-      });
+  function animate() {
+    angle += 0.005;
+    const x = Math.cos(angle) * radius;
+    const z = Math.sin(angle) * radius;
+    const deg = -(angle * 180 / Math.PI);
+    lizard.setAttribute('position', `${x} 0 ${z}`);
+    lizard.setAttribute('rotation', `90 ${deg} 0`);
+    requestAnimationFrame(animate);
+  }
+  animate();
+});
     </script>
   </body>
 </html>
