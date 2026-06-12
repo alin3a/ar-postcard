@@ -5,6 +5,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <script src="https://unpkg.com/aframe-chromakey-material/dist/aframe-chromakey-material.min.js"></script>
+  <style>
+    body { margin: 0; overflow: hidden; }
+  </style>
+</head>
+<body>
+  <a-scene 
+    mindar-image="imageTargetSrc: ./targets.mind; autoStart: true; uiScanning: true;"
+    color-space="sRGB" 
+    renderer="colorManagement: true, physicallyCorrectLights, alpha: true" 
+    vr-mode-ui="enabled: false" 
+    device-orientation-permission-ui="enabled: false">
+
+    <a-assets>
+      <video 
+        id="fassadeVideo" 
+        src="./fassade.mp4" 
+        preload="auto" 
+        loop="true" 
+        muted 
+        playsinline 
+        crossorigin="anonymous">
+      </video>
+    </a-assets>
+
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+    <a-entity mindar-image-target="targetIndex: 0">
+      <a-entity 
+        geometry="primitive: plane; width: 1; height: 0.624"
+        material="shader: chromakey; src: #fassadeVideo; color: 0 1 0"
+        position="0 0 0">
+      </a-entity>
+    </a-entity>
+
+  </a-scene>
+
+  <script>
+    const video = document.querySelector('#fassadeVideo');
+    const sceneEl = document.querySelector('a-scene');
+    sceneEl.addEventListener('targetFound', () => {
+      video.currentTime = 0;
+      video.play();
+    });
+    sceneEl.addEventListener('targetLost', () => {
+      video.pause();
+    });
+  </script>
+</body>
+</html><!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
   <script src="https://unpkg.com/aframe-transparent-video-shader@1.0.6/dist/aframe-transparent-video-shader.umd.js"></script>
   <style>
     body { margin: 0; overflow: hidden; }
