@@ -5,63 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <script src="https://unpkg.com/aframe-chromakey-material/dist/aframe-chromakey-material.min.js"></script>
   <style>
     body { margin: 0; overflow: hidden; }
   </style>
 </head>
 <body>
-  <script>
-    AFRAME.registerShader('despill-chromakey', {
-      schema: {
-        src: {type: 'map'},
-        color: {type: 'vec3', is: 'uniform', default: {x: 0, y: 1, z: 0}},
-        threshold: {type: 'number', is: 'uniform', default: 0.45},
-        smoothing: {type: 'number', is: 'uniform', default: 0.2}
-      },
-      init: function (data) {
-        this.material = new THREE.ShaderMaterial({
-          uniforms: {
-            myTexture: { value: new THREE.VideoTexture(data.src) },
-            color: { value: new THREE.Vector3(data.color.x, data.color.y, data.color.z) },
-            threshold: { value: data.threshold },
-            smoothing: { value: data.smoothing }
-          },
-          vertexShader: `
-            varying vec2 vUv;
-            void main() {
-              vUv = uv;
-              gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-            }
-          `,
-          fragmentShader: `
-            uniform sampler2D myTexture;
-            uniform vec3 color;
-            uniform float threshold;
-            uniform float smoothing;
-            varying vec2 vUv;
-            void main() {
-              vec4 texColor = texture2D(myTexture, vUv);
-              vec3 tColor = texColor.rgb;
-              float dist = distance(tColor, color);
-              float alpha = smoothstep(threshold, threshold + smoothing, dist);
-              float spill = max(0.0, tColor.g - max(tColor.r, tColor.b));
-              vec3 despilled = tColor - vec3(0.0, spill, 0.0) * (1.0 - alpha);
-              gl_FragColor = vec4(despilled, alpha);
-            }
-          `,
-          transparent: true
-        });
-      },
-      update: function (data) {
-        this.material.uniforms.color.value.set(data.color.x, data.color.y, data.color.z);
-        this.material.uniforms.threshold.value = data.threshold;
-        this.material.uniforms.smoothing.value = data.smoothing;
-      }
-    });
-  </script>
-
   <a-scene 
-    mindar-image="imageTargetSrc: ./targets.mind; autoStart: true; uiScanning: true; filterMinCF: 0.0001; filterBeta: 10; missTolerance: 10;"
+    mindar-image="imageTargetSrc: ./targets.mind; autoStart: true; uiScanning: true;"
     color-space="sRGB" 
     renderer="colorManagement: true, physicallyCorrectLights, alpha: true" 
     vr-mode-ui="enabled: false" 
@@ -84,7 +35,7 @@
     <a-entity mindar-image-target="targetIndex: 0">
       <a-entity 
         geometry="primitive: plane; width: 1; height: 0.624"
-        material="shader: despill-chromakey; src: #fassadeVideo; color: 0 1 0; threshold: 0.45; smoothing: 0.2"
+        material="shader: chromakey; src: #fassadeVideo; color: 0 1 0"
         position="0 0.025 0">
       </a-entity>
     </a-entity>
