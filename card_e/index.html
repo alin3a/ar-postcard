@@ -8,11 +8,27 @@
   <script src="https://unpkg.com/aframe-chromakey-material/dist/aframe-chromakey-material.min.js"></script>
   <style>
     body { margin: 0; overflow: hidden; }
+    #startButton {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      padding: 20px 40px;
+      font-size: 20px;
+      background: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
+
+  <button id="startButton">AR starten ▶</button>
+
   <a-scene 
-  mindar-image="imageTargetSrc: ./targets.mind; autoStart: true; uiScanning: true; filterMinCF: 0.0001; filterBeta: 10; missTolerance: 10;"
+    mindar-image="imageTargetSrc: ./targets.mind; autoStart: true; uiScanning: true; filterMinCF: 0.001; filterBeta: 10; missTolerance: 10;"
     color-space="sRGB" 
     renderer="colorManagement: true, physicallyCorrectLights, alpha: true" 
     vr-mode-ui="enabled: false" 
@@ -45,13 +61,25 @@
   <script>
     const video = document.querySelector('#fassadeVideo');
     const sceneEl = document.querySelector('a-scene');
+    const btn = document.querySelector('#startButton');
+
+    // Button einmalig antippen entsperrt Autoplay
+    btn.addEventListener('click', () => {
+      video.play().then(() => {
+        video.pause(); // sofort wieder pausieren
+        btn.style.display = 'none'; // Button verstecken
+      });
+    });
+
     sceneEl.addEventListener('targetFound', () => {
       video.currentTime = 0;
       video.play();
     });
+
     sceneEl.addEventListener('targetLost', () => {
       video.pause();
     });
   </script>
+
 </body>
 </html>
